@@ -22,9 +22,10 @@ public class DtoConverter{
 	}
 
 	public Object convertUserAndTokenToJwtUserResponse(User user, String token) {
-		// TODO Auto-generated method stub
+		
 		return JwtUserResponse.jwtUserResponseBuilder()
-				//.rol(user.getRole().stream().map(Rol::name).collect(Collectors.toSet()))
+				.username(user.getUsername())
+				.role(user.getUser_role())
 				.token(token)
 				.build();
 	}

@@ -18,8 +18,8 @@ public class JwtUserResponse extends JwtUserInfo{
 	private String token;
 	
 	@Builder(builderMethodName = "jwtUserResponseBuilder")
-	public JwtUserResponse(String username, String password,String avatar, Set<String>roles, String token) {
-		super(username,roles,token);
+	public JwtUserResponse(String username, String password,String avatar, String role, String token) {
+		super(username,role,token);
 		this.token = token;
 	}
 }

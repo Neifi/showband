@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class JwtUserInfo {
 
 	private String username;
-	private Set<String> roles;
+	private String roles;
 	private String token;
 	
 

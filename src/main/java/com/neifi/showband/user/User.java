@@ -70,10 +70,7 @@ public class User extends RepresentationModel <User> implements UserDetails{
 	private float latitude;
 	private float longitude;
 
-//	@ElementCollection(fetch = FetchType.EAGER)
-//	@Enumerated(EnumType.STRING)
-//
-//	private Set<Rol> role;
+	private String user_role;
 	
 	
 	@CreatedDate

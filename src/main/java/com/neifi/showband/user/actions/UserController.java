@@ -1,9 +1,11 @@
 package com.neifi.showband.user.actions;
 
 import java.net.URI;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
@@ -14,6 +16,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Links;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.neifi.showband.location.Location;
 import com.neifi.showband.location.LocationService;
+import com.neifi.showband.user.Rol;
 import com.neifi.showband.user.User;
 import com.neifi.showband.user.exceptions.UserNotFoundException;
 import com.neifi.showband.user.services.DtoConverter;
@@ -43,7 +47,7 @@ public class UserController {
 	private final UserService service;
 	private final DtoConverter converter;
 	private final LocationService locationService;
-	
+	private final PasswordEncoder passwordEncoder;
 	//TODO oauth2 auth
 	@PostMapping("login")
 	private ResponseEntity<UserInfo> userLogin(){
@@ -78,7 +82,7 @@ public class UserController {
 		List<User> nearUsers = locationService
 				//TODO cambiar ciudad por pais y ciudad o ciudad que 
 				//corresponda al pais con id del usuario
-				.findUserNearTo(user.getCity(), distance,location);
+				.findUserNearTo(user, distance);
 		return ResponseEntity.ok(nearUsers);
 	}
 	
@@ -88,9 +92,14 @@ public class UserController {
 			return ResponseEntity.badRequest().build();
 		}
 		
-		UserInfo usr = converter.userInfoConverter(service.save(user));
+		user.setPassword(passwordEncoder.encode(user.getPassword()));
+		user.setCreation_date(LocalDateTime.now());
+		
+		service.save(user);
+		UserInfo usr = converter.userInfoConverter(user);
 		Link usrLink = linkTo(UserController.class).slash(user.getUserId()).withSelfRel();
 		usr.add(usrLink);
+		
 		return ResponseEntity.status(HttpStatus.CREATED).body(usr.getLinks());
 	}
 	

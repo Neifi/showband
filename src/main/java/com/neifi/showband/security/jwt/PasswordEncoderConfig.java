@@ -1,20 +1,15 @@
-package com.neifi.showband.config;
+package com.neifi.showband.security.jwt;
 
-import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.neifi.showband.band.Band;
-import com.neifi.showband.user.User;
-
 @Configuration
-public class Beans {
+public class PasswordEncoderConfig {
 	
 	@Bean
-	public ModelMapper modelMapper() {
-		return new ModelMapper();
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
 	}
-	
 }

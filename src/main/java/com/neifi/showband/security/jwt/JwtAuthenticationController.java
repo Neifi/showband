@@ -12,6 +12,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,13 +32,13 @@ public class JwtAuthenticationController{
 	private final JwtProvider provider;
 	private final DtoConverter converter;
 	private final UserRepository repo;
+	private final PasswordEncoder encoder;
 	@PostMapping("auth/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) throws AuthenticationException{
-		User test = repo.findByUsername("test").orElseThrow(UserNotFoundException::new);
-		System.out.println(test.getPassword());
+		
 		Authentication authentication = authenticationManager.authenticate(
 				new UsernamePasswordAuthenticationToken
-				(test.getUsername(), test.getPassword()));
+				(loginRequest.getUsername(), loginRequest.getPassword()));
 		
 		SecurityContextHolder.getContext().setAuthentication(authentication);
 		User user = (User) authentication.getPrincipal();

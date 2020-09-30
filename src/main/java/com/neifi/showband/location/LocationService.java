@@ -1,9 +1,7 @@
 package com.neifi.showband.location;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
-import java.util.stream.Collector;
+
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +23,11 @@ public class LocationService extends Haversine{
 	
 	
 	
-	public List<User> findUserNearTo(String city,int distance, Location userLocation){
-		
-		List<User>  usersInCity = repository.findByCity(city).stream()
+	public List<User> findUserNearTo(User user, int distance){
+		List<User>  usersInCity = repository.findByCity(user.getCity()).stream()
 				.filter(u -> isInRange(u, distance))
 				.collect(Collectors.toList());
+
 		return usersInCity;
 	}
 	

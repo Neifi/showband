@@ -26,7 +26,7 @@ public class CustomUserDetailsService implements UserDetailsService{
 	}
 
 	public Optional<User> loadUserById(Long id) {
-		// TODO Auto-generated method stub
+
 		return userService.findById(id);
 	}
 
