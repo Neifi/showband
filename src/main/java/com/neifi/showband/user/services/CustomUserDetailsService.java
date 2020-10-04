@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import com.neifi.showband.user.User;
-import com.neifi.showband.user.exceptions.UserNotFoundException;
 
 import lombok.RequiredArgsConstructor;
 

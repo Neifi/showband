@@ -2,20 +2,13 @@ package com.neifi.showband.location;
 
 import java.util.List;
 
-import java.util.stream.Collectors;
-
-import javax.management.RuntimeErrorException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.neifi.showband.location.formulas.GeoLocation;
-import com.neifi.showband.location.formulas.Haversine;
 import com.neifi.showband.user.User;
 import com.neifi.showband.user.UserRepository;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
 
 
 @Service

@@ -1,12 +1,9 @@
 package com.neifi.showband.user.actions;
 
-import java.net.URI;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.*;
 
@@ -26,14 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.neifi.showband.location.Location;
 import com.neifi.showband.location.LocationService;
-import com.neifi.showband.user.Rol;
 import com.neifi.showband.user.User;
 import com.neifi.showband.user.exceptions.UserNotFoundException;
 import com.neifi.showband.user.services.DtoConverter;
 import com.neifi.showband.user.services.UserService;
 import com.neifi.showband.user.shared.UserInfo;
+import com.neifi.showband.user.shared.UserLink;
 
 import lombok.AllArgsConstructor;
 
@@ -55,33 +51,32 @@ public class UserController {
 	}
 	
 	@GetMapping("{id}")
-	private ResponseEntity<User> getUser(@PathVariable long id){
+	private ResponseEntity<UserInfo> getUser(@PathVariable long id){
 		
 		User usr = isPresent(id);
 		
-		return ResponseEntity.ok(usr);
+		return ResponseEntity.ok(converter.userInfoConverter(usr));
 		
 	}
 	
 	@GetMapping("list")
-	private ResponseEntity<List<User>> getAllUsers() {
+	private ResponseEntity<List<UserLink>> getAllUsers() {
 		List<User> usrs = service.findAll();
 		
 	
 		if (usrs.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
-		for (User u : usrs) {
-			 u.add((linkTo(UserController.class).slash(u.getUserId()).withSelfRel()));
-		}
-		return ResponseEntity.ok(usrs);
+		
+		return ResponseEntity.ok(mapToUserLink(usrs));
 
 	}
 
 	@GetMapping("nearest")
-	private ResponseEntity<List<User>> findNearUsers(@RequestBody User user, @RequestParam int distance){
+	private ResponseEntity<List<UserLink>> findNearUsers(@RequestBody User user, @RequestParam int distance){
 		List<User> nearUsers = locationService.findUserNearTo(user, distance);
-		return ResponseEntity.ok(nearUsers);
+		
+		return ResponseEntity.ok(mapToUserLink(nearUsers));
 	}
 	
 	@PostMapping("register")
@@ -92,7 +87,7 @@ public class UserController {
 		
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
 		user.setCreation_date(LocalDateTime.now());
-		
+		user.setUser_role("ADMIN");
 		service.save(user);
 		UserInfo usr = converter.userInfoConverter(user);
 		Link usrLink = linkTo(UserController.class).slash(user.getUserId()).withSelfRel();
@@ -118,14 +113,16 @@ public class UserController {
 		return usr;
 	}
 	
-	private List<UserInfo> mapToUserInfoWithLinks(List<User> usrs) {
+	private List<UserLink> mapToUserLink(List<User> usrs) {
 		Link link = linkTo(UserController.class).withSelfRel();
 		
-		List<UserInfo> res = new ArrayList<UserInfo>();
+		List<UserLink> res = new ArrayList<UserLink>();
+
 		CollectionModel<User> coleCollectionModel = new CollectionModel<User>(usrs, link);
 		
 		coleCollectionModel
-		.forEach(u -> res.add(converter.userInfoConverter(u)));
+		.forEach(u -> res.add(converter.userLinkConverter(u)));
+		
 		res.forEach(u -> u.add((linkTo(UserController.class).slash(u.getUserId()).withSelfRel())));
 			
 		

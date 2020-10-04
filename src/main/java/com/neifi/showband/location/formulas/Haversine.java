@@ -2,8 +2,6 @@ package com.neifi.showband.location.formulas;
 
 import com.neifi.showband.location.Location;
 
-import lombok.Getter;
-
 
 public abstract class Haversine {
 

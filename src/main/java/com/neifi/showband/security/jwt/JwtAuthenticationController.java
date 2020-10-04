@@ -1,6 +1,6 @@
 package com.neifi.showband.security.jwt;
 
-import java.util.Optional;
+
 
 import javax.naming.AuthenticationException;
 import javax.validation.Valid;
@@ -12,14 +12,11 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.neifi.showband.user.User;
-import com.neifi.showband.user.UserRepository;
-import com.neifi.showband.user.exceptions.UserNotFoundException;
 import com.neifi.showband.user.services.DtoConverter;
 
 import lombok.RequiredArgsConstructor;
@@ -31,8 +28,7 @@ public class JwtAuthenticationController{
 	@Autowired private  AuthenticationManager authenticationManager;
 	private final JwtProvider provider;
 	private final DtoConverter converter;
-	private final UserRepository repo;
-	private final PasswordEncoder encoder;
+
 	@PostMapping("auth/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest) throws AuthenticationException{
 		

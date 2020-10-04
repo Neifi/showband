@@ -1,17 +1,14 @@
 package com.neifi.showband.user.services;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
 import com.neifi.showband.services.BaseRepoService;
 import com.neifi.showband.user.User;
 import com.neifi.showband.user.UserRepository;
-import com.neifi.showband.user.actions.UserController;
 import com.neifi.showband.user.exceptions.UserNotFoundException;
 
 @Service

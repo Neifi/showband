@@ -37,8 +37,6 @@ public class JwtProvider {
 	private int jwtDurationTokenSecs;
 		
 	private  final Key secret = Keys.hmacShaKeyFor(jwtSecret.getBytes());
-	private  final byte[] secretBytes = secret.getEncoded();
-	private  final String base64SecretBytes = Base64.getEncoder().encodeToString(secretBytes);
 
 	public String generateToken(Authentication authentication) {
 		User usuario = (User) authentication.getPrincipal();
@@ -47,7 +45,7 @@ public class JwtProvider {
 		return Jwts.builder()
 				.setHeaderParam("typ", TOKEN_TYPE).setSubject(Long.toString((usuario.getUserId())))
 				.setIssuedAt(new Date()).setExpiration(tokenExpirationDate).claim("fullname", usuario.getUsername())
-				.signWith(SignatureAlgorithm.HS512,base64SecretBytes)
+				.signWith(secret,SignatureAlgorithm.HS512)
 				.claim("roles", "ADMIN").compact();//usuario.getRol().toString()).compact();
 	}
 
