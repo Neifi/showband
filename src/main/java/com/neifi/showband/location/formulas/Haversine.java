@@ -8,9 +8,10 @@ import lombok.Getter;
 public abstract class Haversine {
 
 	private final float EARTH_RADIUS = 6378.0f;
-	private float km;
+	private final float KM_LAT_DEGREE = 110.567f;
+	private final float KM_LONG_DEGREE = 111.321F;
 	
-	protected float calculateDistanceInKm(Location or, Location dest) {
+	public float calculateDistanceInKm(Location or, Location dest) {
 		
 		float latDif = calculateLatDifference(or, dest);
 		float longDif = calculateLongDifference(or, dest);
@@ -41,6 +42,18 @@ public abstract class Haversine {
 	private float calculateLatDifference(Location or, Location dest) {
 		float latDif = (float) Math.toRadians(dest.getLatitude() - or.getLatitude());
 		return latDif;
+	}
+	
+	public float getKM_LAT_DEGREE() {
+		return KM_LAT_DEGREE;
+	}
+	
+	public float getKM_LONG_DEGREE() {
+		return KM_LONG_DEGREE;
+	}
+	
+	public float getEARTH_RADIUS() {
+		return EARTH_RADIUS;
 	}
 	
 }

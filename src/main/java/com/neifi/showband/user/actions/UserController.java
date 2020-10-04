@@ -64,25 +64,23 @@ public class UserController {
 	}
 	
 	@GetMapping("list")
-	private ResponseEntity<List<UserInfo>> getAllUsers() {
+	private ResponseEntity<List<User>> getAllUsers() {
 		List<User> usrs = service.findAll();
+		
 	
 		if (usrs.isEmpty()) {
 			return ResponseEntity.noContent().build();
 		}
-
-		List<UserInfo> res = mapToUserInfoWithLinks(usrs);
-		return ResponseEntity.ok(res);
+		for (User u : usrs) {
+			 u.add((linkTo(UserController.class).slash(u.getUserId()).withSelfRel()));
+		}
+		return ResponseEntity.ok(usrs);
 
 	}
 
 	@GetMapping("nearest")
 	private ResponseEntity<List<User>> findNearUsers(@RequestBody User user, @RequestParam int distance){
-		Location location = new Location(user.getLongitude(), user.getLatitude());
-		List<User> nearUsers = locationService
-				//TODO cambiar ciudad por pais y ciudad o ciudad que 
-				//corresponda al pais con id del usuario
-				.findUserNearTo(user, distance);
+		List<User> nearUsers = locationService.findUserNearTo(user, distance);
 		return ResponseEntity.ok(nearUsers);
 	}
 	

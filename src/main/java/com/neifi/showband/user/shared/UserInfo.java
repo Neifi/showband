@@ -20,7 +20,7 @@ public class UserInfo extends RepresentationModel<UserInfo>{
 	private Long userId;
 	private String name;
 	private String bio;    
-	private String email;
+	private String username;
 	private String country;
 	private String city;
 
